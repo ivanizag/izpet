@@ -44,3 +44,11 @@ the screen.
 The cassette recorder, where most PET owners kept their programs: two
 programs saved on a blank tape and one of them loaded back, with the time it
 took.
+
+### [The disk drive](disk.md)
+
+<a href="disk.md"><img src="images/disk/scratch.png" width="320" alt="The directory of a disk"></a>
+
+The disk commands of BASIC 4 on an 8032 with an 8050: a disk formatted, a
+program saved and loaded, a data file written and read, the status of the
+drive, and a folder of your computer used as a disk.

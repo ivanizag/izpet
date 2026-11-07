@@ -57,28 +57,32 @@ func hasText(p *izpet.PET, text string) bool {
 	return strings.Contains(strings.ToUpper(p.GetScreenText()), strings.ToUpper(text))
 }
 
-// waitForCursor runs the machine until the cursor, after the last line with
-// a text, is shown: it blinks, and a picture taken at the wrong time has none
+// waitForCursor runs the machine until the cursor is shown on the line after
+// the last one with a text: it blinks, and a picture taken at the wrong time
+// has none. The line is looked for on each frame, a command still running
+// moves it.
 func waitForCursor(t *testing.T, p *izpet.PET, after string) {
 	t.Helper()
 	columns := 40
 	if p.Is80Columns() {
 		columns = 80
 	}
-	waitForText(t, p, after, 600)
-	lines := strings.Split(strings.ToUpper(p.GetScreenText()), "\n")
-	row := -1
-	for i, line := range lines {
-		if strings.Contains(line, strings.ToUpper(after)) {
-			row = i
+	after = strings.ToUpper(after)
+	shown := func() bool {
+		lines := strings.Split(strings.ToUpper(p.GetScreenText()), "\n")
+		row := -1
+		for i, line := range lines {
+			if strings.Contains(line, after) {
+				row = i
+			}
 		}
+		if row < 0 || row+1 >= 25 {
+			return false
+		}
+		return p.Peek(uint16(0x8000+(row+1)*columns))&0x80 != 0
 	}
-	if row < 0 {
-		t.Fatalf("'%v' not found on the screen", after)
-	}
-	address := uint16(0x8000 + (row+1)*columns)
-	if !p.RunUntil(120, func() bool { return p.Peek(address)&0x80 != 0 }) {
-		t.Fatalf("the cursor is not shown")
+	if !p.RunUntil(600, shown) {
+		t.Fatalf("the cursor is not shown:\n%v", p.GetScreenText())
 	}
 }
 
