@@ -34,3 +34,13 @@ right on the screen, and a program that runs for ever stopped with RUN/STOP.
 The graphics characters on the keys, typed with SHIFT: a box, text in reverse,
 the famous one line maze, and characters written straight into the memory of
 the screen.
+
+## Keeping programs
+
+### [Programs on cassette](cassette.md)
+
+<a href="cassette.md"><img src="images/cassette/loaded.png" width="320" alt="A program loaded from the tape"></a>
+
+The cassette recorder, where most PET owners kept their programs: two
+programs saved on a blank tape and one of them loaded back, with the time it
+took.
