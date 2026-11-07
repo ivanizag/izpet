@@ -2,6 +2,7 @@ package izpet
 
 import (
 	"github.com/ivanizag/izpet/component"
+	"github.com/ivanizag/izpet/ieee488"
 )
 
 /*
@@ -51,7 +52,19 @@ const (
 	ioSelectVia  = 0x40
 	ioSelectCrtc = 0x80
 
+	pia1PA4Sense1 = 0x10
+	pia1PA5Sense2 = 0x20
+	pia1PA6EOI    = 0x40
+	viaPB0NDAC    = 0x01
+	viaPB1NRFD    = 0x02
+	viaPB2ATN     = 0x04
+	viaPB3Write   = 0x08
+	viaPB4Motor2  = 0x10
 	viaPB5Retrace = 0x20
+	viaPB6NRFD    = 0x40
+	viaPB7DAV     = 0x80
+	viaPBOutputs  = viaPB1NRFD | viaPB2ATN | viaPB3Write | viaPB4Motor2
+	pia1PAUnwired = 0x8f // The keyboard row outputs and the diagnostic sense
 )
 
 type ioE8Page struct {
@@ -68,7 +81,6 @@ func newIOE8Page(p *PET, hasCrtc bool) *ioE8Page {
 	if hasCrtc {
 		io.crtc = &component.MC6845{}
 	}
-	io.reset()
 	return &io
 }
 
@@ -77,35 +89,83 @@ func (io *ioE8Page) reset() {
 	io.pia2.Reset()
 	io.via.Reset()
 
-	// Nothing on the IEEE-488 bus, the user port or the cassette ports
-	io.pia1.SetInputA(0xff)
-	io.pia1.SetInputB(0xff)
-	io.pia2.SetInputA(0xff)
-	io.pia2.SetInputB(0xff)
+	// Nothing on the user port
 	io.via.SetInputA(0xff)
-	io.via.SetInputB(0xff)
-	io.pia1.SetCA1(true)
-	io.pia2.SetCA1(true)
-	io.pia2.SetCB1(true)
+	io.pia1.SetInputB(0xff)
+	io.pia2.SetInputB(0xff)
 	io.via.SetCA1(true)
-	io.via.SetCB1(true)
+	io.updateInputs()
+	io.updateBus()
 }
 
-// updateInputs refreshes the inputs that depend on the outputs
+// updateInputs sets the levels the chips see on their input pins
 func (io *ioE8Page) updateInputs() {
-	row := io.pia1.GetPortA() & 0x0f
-	io.pia1.SetInputB(io.p.keyboard.readRow(row))
+	p := io.p
+	bus := p.bus.Levels()
+
+	// PIA1: keyboard, cassette sense, EOI
+	pa := uint8(pia1PAUnwired)
+	if !p.cassettes[0].inserted {
+		pa |= pia1PA4Sense1
+	}
+	if !p.cassettes[1].inserted {
+		pa |= pia1PA5Sense2
+	}
+	if bus.EOI {
+		pa |= pia1PA6EOI
+	}
+	io.pia1.SetInputA(pa)
+	io.pia1.SetInputB(p.keyboard.readRow(io.pia1.GetPortA() & 0x0f))
+	io.pia1.SetCA1(p.cassettes[0].level)
+
+	// PIA2: IEEE data, ATN and SRQ
+	io.pia2.SetInputA(bus.Data)
+	io.pia2.SetCA1(bus.ATN)
+	io.pia2.SetCB1(bus.SRQ)
+
+	// VIA: IEEE handshake, retrace, cassette #2
+	pb := uint8(viaPBOutputs)
+	if bus.NDAC {
+		pb |= viaPB0NDAC
+	}
+	if !p.video.blank {
+		pb |= viaPB5Retrace
+	}
+	if bus.NRFD {
+		pb |= viaPB6NRFD
+	}
+	if bus.DAV {
+		pb |= viaPB7DAV
+	}
+	io.via.SetInputB(pb)
+	io.via.SetCB1(p.cassettes[1].level)
+}
+
+// updateBus sets the IEEE-488 lines driven by the PET and lets the devices
+// react
+func (io *ioE8Page) updateBus() {
+	viaPB := io.via.GetPortB()
+	io.p.bus.SetController(ieee488.Lines{
+		Data: io.pia2.GetPortB(),
+		EOI:  io.pia1.GetCA2(),
+		DAV:  io.pia2.GetCB2(),
+		NRFD: viaPB&viaPB1NRFD != 0,
+		NDAC: io.pia2.GetCA2(),
+		ATN:  viaPB&viaPB2ATN != 0,
+		SRQ:  true,
+	})
 }
 
 // updateRetrace drives the retrace signals from the video
 func (io *ioE8Page) updateRetrace() {
-	v := io.p.video
-	io.pia1.SetCB1(v.retraceSignal())
-	pb := uint8(0xff)
-	if v.blank {
-		pb &^= viaPB5Retrace
-	}
-	io.via.SetInputB(pb)
+	io.pia1.SetCB1(io.p.video.retraceSignal())
+}
+
+// cassetteLines returns the motor of each deck, on when true, and the
+// level of the write line
+func (io *ioE8Page) cassetteLines() (motor1 bool, motor2 bool, write bool) {
+	viaPB := io.via.GetPortB()
+	return !io.pia1.GetCB2(), viaPB&viaPB4Motor2 == 0, viaPB&viaPB3Write != 0
 }
 
 func (io *ioE8Page) peek(address uint8) uint8 {
@@ -148,6 +208,9 @@ func (io *ioE8Page) poke(address uint8, value uint8) {
 	}
 	if address&ioSelectCrtc != 0 && io.crtc != nil {
 		io.crtc.Write(address&1 != 0, value)
+	}
+	if address&(ioSelectPia1|ioSelectPia2|ioSelectVia) != 0 {
+		io.updateBus()
 	}
 }
 

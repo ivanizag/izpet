@@ -33,7 +33,7 @@ const helpMessage = `
         Home: HOME, with shift CLR
 
  Click on the keys of the keyboard
- Drop a .prg file to load and run it
+ Drop a program, tape or disk to use it
 
     Run izpet -h for more options
    https://github.com/ivanizag/izpet
@@ -71,7 +71,7 @@ func (g *game) Update() error {
 	}
 
 	for _, f := range droppedFiles() {
-		g.p.SendLoadProgram(f)
+		g.p.SendLoadFile(f)
 	}
 
 	if g.showHelp {

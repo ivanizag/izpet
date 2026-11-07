@@ -6,6 +6,9 @@ import (
 	"sync/atomic"
 
 	"github.com/ivanizag/iz6502"
+
+	"github.com/ivanizag/izpet/cbmdos"
+	"github.com/ivanizag/izpet/ieee488"
 )
 
 // PET represents all the components and state of the emulated machine
@@ -18,6 +21,11 @@ type PET struct {
 	video    *video
 	keyboard *keyboard
 	sound    sound
+
+	bus       *ieee488.Bus
+	drive     *cbmdos.Drive // Unit 8, with drives 0 and 1
+	printer   *printer      // Unit 4, nil if there is none
+	cassettes [2]*cassetteDeck
 
 	commandChannel chan command
 
@@ -89,16 +97,38 @@ func NewPET(config *Configuration) (*PET, error) {
 		return nil, err
 	}
 
+	p.bus = ieee488.NewBus()
+	p.drive = cbmdos.NewDrive(diskUnit, config.hasTracer("drive"))
+	p.bus.Attach(p.drive)
+	if config.Printer != "" {
+		p.printer = newPrinter(config.Printer)
+		p.bus.Attach(p.printer)
+	}
+	p.cassettes[0] = newCassetteDeck(1)
+	p.cassettes[1] = newCassetteDeck(2)
+
 	p.io = newIOE8Page(&p, m.video != videoTTL)
 	p.video = newVideo(m.video, charGen, p.io.crtc)
 	p.keyboard = newKeyboard(m.keyboard)
+	p.io.reset()
 
 	p.cpu = iz6502.NewNMOS6502(p.mmu)
 	p.cpu.SetTrace(p.cpuTrace)
 
-	for _, program := range config.programs {
-		err = p.LoadProgram(program)
-		if err != nil {
+	for drive, disk := range []string{config.Disk, config.Disk1} {
+		if disk != "" {
+			if err := p.InsertDisk(drive, disk); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if config.Tape != "" {
+		if err := p.InsertTape(1, config.Tape); err != nil {
+			return nil, err
+		}
+	}
+	for _, file := range config.files {
+		if err := p.LoadFile(file); err != nil {
 			return nil, err
 		}
 	}

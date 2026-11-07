@@ -38,7 +38,7 @@ func (p *PET) Run() {
 			referenceTime = time.Now().Add(-time.Duration(float64(p.cycles) * p.cycleDurationNs))
 		}
 
-		if p.cycleDurationNs != 0 {
+		if p.cycleDurationNs != 0 && !p.isTapeMoving() {
 			// Wait until the next steps have to run
 			clockDuration := time.Since(referenceTime)
 			simulatedDuration := time.Duration(float64(p.cycles) * p.cycleDurationNs)
@@ -114,11 +114,25 @@ func (p *PET) stepInstruction() {
 
 	p.io.tick(cycles)
 	p.sound.tick(cycles, p.io.via.GetCB2())
+	if p.cassettes[0].inserted || p.cassettes[1].inserted {
+		p.tickCassettes(cycles)
+	}
+	if p.bus.IsWaiting() {
+		p.bus.Tick(cycles)
+	}
 	if p.video.tick(cycles) {
 		p.endFrame()
 	}
 	p.io.updateRetrace()
 	p.cpu.SetIRQ(p.io.irq())
+}
+
+func (p *PET) tickCassettes(cycles uint64) {
+	motor1, motor2, write := p.io.cassetteLines()
+	p.cassettes[0].tick(cycles, motor1, write)
+	p.cassettes[1].tick(cycles, motor2, write)
+	p.io.pia1.SetCA1(p.cassettes[0].level)
+	p.io.via.SetCB1(p.cassettes[1].level)
 }
 
 func (p *PET) endFrame() {
@@ -130,5 +144,6 @@ func (p *PET) endFrame() {
 
 func (p *PET) reset() {
 	p.io.reset()
+	p.bus.Reset()
 	p.cpu.Reset()
 }

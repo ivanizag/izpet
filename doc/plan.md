@@ -303,14 +303,13 @@ One package per thing that knows nothing of the machine. Done so far:
 | `audio/` | the sample stream to the frontends, from izmac |
 | `frontend/petebiten/`, `frontend/headless/` | the frontends |
 
-To come:
-
-| Path | Contents |
-|---|---|
 | `cassette.go` | the two decks, their sense and motor lines |
+| `printer.go` | the printer on the unit 4 |
+| `media.go` | the files given to the PET, by their type |
 | `ieee488/` | the bus as wired lines, devices attach to it |
 | `cbmdos/` | a protocol level drive: the command channel over a disk image or a host folder |
-| `storage/` | D64, D80, D82, TAP, T64, WAV |
+| `storage/` | TAP, WAV and T64 |
+| `frontend/shared/` | the keyboard diagrams |
 
 ## Milestones
 
@@ -319,8 +318,9 @@ To come:
 2. **Done.** Keyboard and the ebiten frontend; `.prg` loading.
 3. **Done.** CRTC video: 4032 fat 40 and 8032, with 50/60 Hz and text/graphics mode.
 4. **Done, but snow.** BASIC 1 and the original 2001: chiclet keyboard, the retrace wait.
-5. Cassette: TAP, then WAV and T64.
-6. IEEE-488 and a protocol level drive on D64/D80/D82 and host folders; a printer.
+5. **Done.** Cassette: TAP and WAV, recording to TAP, T64 as programs.
+6. **Done.** IEEE-488 and a protocol level drive on D64/D80/D82 and host folders; a printer
+   to a text file.
 7. **Done.** Sound on CB2. Option ROMs are also in, with `-rom9` and `-roma`.
 8. 8096 and 8296 banking.
 9. The snow of the 2001, the 6545 status and light pen, CRTC changes within a frame.

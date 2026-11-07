@@ -27,9 +27,14 @@ type Configuration struct {
 	Rom9  string // Option ROM at $9000
 	RomA  string // Option ROM at $a000
 
+	Disk    string // Disk image or folder for the drive 0 of the unit 8
+	Disk1   string // Disk image or folder for the drive 1 of the unit 8
+	Tape    string // Tape for the deck #1
+	Printer string // Text file for the printer on the unit 4, none if empty
+
 	cycleDurationNs float64
 	optionRoms      []romChip
-	programs        []string
+	files           []string
 }
 
 // NewConfiguration returns the default configuration
@@ -42,7 +47,8 @@ func NewConfiguration() *Configuration {
 }
 
 // ParseFlags fills the configuration from the command line arguments. The
-// arguments left after the options are programs to load.
+// arguments left after the options are files to load: programs, tapes or
+// disks, see LoadFile.
 func (c *Configuration) ParseFlags(name string, args []string, output io.Writer) error {
 	fs := flag.NewFlagSet(name, flag.ContinueOnError)
 	fs.SetOutput(output)
@@ -75,16 +81,24 @@ func (c *Configuration) AddFlags(fs *flag.FlagSet) {
 	fs.StringVar(&c.Speed, "speed", c.Speed,
 		"'real', 'full' or the speed in MHz")
 	fs.StringVar(&c.Trace, "trace", c.Trace,
-		"comma separated list of tracers: cpu")
+		"comma separated list of tracers: cpu, drive")
 	fs.StringVar(&c.Rom9, "rom9", c.Rom9,
 		"option ROM at $9000")
 	fs.StringVar(&c.RomA, "roma", c.RomA,
 		"option ROM at $a000")
+	fs.StringVar(&c.Disk, "disk", c.Disk,
+		"disk image, D64, D80 or D82, or folder for the drive 0 of the unit 8. Created if it does not exist")
+	fs.StringVar(&c.Disk1, "disk1", c.Disk1,
+		"disk image or folder for the drive 1 of the unit 8")
+	fs.StringVar(&c.Tape, "tape", c.Tape,
+		"tape, TAP or WAV, for the deck #1. A TAP file that does not exist is a blank tape")
+	fs.StringVar(&c.Printer, "printer", c.Printer,
+		"text file to write what is printed on the unit 4, no printer if empty")
 }
 
-// AddFiles adds the files given without option, programs to load
+// AddFiles adds the files given without option, programs, tapes or disks
 func (c *Configuration) AddFiles(filenames []string) {
-	c.programs = append(c.programs, filenames...)
+	c.files = append(c.files, filenames...)
 }
 
 // Validate checks the options and prepares them

@@ -37,14 +37,18 @@ func (p *PET) LoadProgram(filename string) error {
 	if err != nil {
 		return err
 	}
+	return p.loadProgramData(filename, data)
+}
+
+func (p *PET) loadProgramData(name string, data []uint8) error {
 	if len(data) < 3 {
-		return fmt.Errorf("%v is too short for a program", filename)
+		return fmt.Errorf("%v is too short for a program", name)
 	}
 	address := uint16(data[0]) | uint16(data[1])<<8
 	if int(address)+len(data)-2 > 0x10000 {
-		return fmt.Errorf("%v does not fit in memory", filename)
+		return fmt.Errorf("%v does not fit in memory", name)
 	}
-	p.pendingPrograms = append(p.pendingPrograms, pendingProgram{filename, data})
+	p.pendingPrograms = append(p.pendingPrograms, pendingProgram{name, data})
 	return nil
 }
 

@@ -60,6 +60,21 @@ screen back as text with `GetScreenText`. The helpers are in `petTester_test.go`
 - **The business keyboard starts in the lowercase mode.** Compare the screen text without
   case, and type BASIC with `TypeText`, that types letters unshifted.
 - **The zero page of BASIC 1 is not the one of BASIC 2 and 4**, see `basicVarTab`.
+- **The IEEE-488 devices react at once, except the talker.** The bus settles after every
+  write of the PET to the I/O page. A talker waits `talkerDelay` cycles with the listener
+  ready before putting a byte on the bus: starting a TALK the PET releases NRFD a few
+  cycles before NDAC, and a device answering at once takes it for a listener ready and the
+  release of NDAC for the byte accepted. A device going from listener to talker also has
+  to wait a settle round, the levels it sees still have its own NDAC low.
+- **All the devices accept the commands under ATN**, also the ones for another device. With
+  the drive 8 on the bus a missing device is only seen when the data is sent, and BASIC
+  just sets ST.
+- **BASIC 1 can't use the disks** and **BASIC 2 waits for a missing file until STOP**, as
+  the real ROMs do. Test the drives on BASIC 2 and 4, and file not found on BASIC 4.
+- **The tape read line moves every instruction**, the kernal reads it through the PIA1 CA1
+  interrupt. A pulse written goes from a rising edge of the write line to the next.
+- **`RUN` clears the variables and `INPUT#` is not allowed in direct mode**, for tests that
+  type BASIC.
 
 ## Layout
 
@@ -68,11 +83,17 @@ screen back as text with `GetScreenText`. The helpers are in `petTester_test.go`
 | `pet.go`, `petRun.go` | the machine and its run loop |
 | `models.go` | the model table |
 | `memoryManager.go` | the memory map |
-| `ioE8Page.go` | the I/O page and the wiring of the chips |
+| `ioE8Page.go` | the I/O page and the wiring of the chips, the IEEE-488 lines and the cassettes |
 | `video.go` | the video timing, the retrace signals and the image |
 | `keyboard.go` | the keyboard matrices and the typing of characters |
 | `sound.go` | the CB2 sound |
 | `program.go` | loading `.prg` files |
+| `media.go` | the files given to the PET by their type: programs, tapes, disks |
+| `cassette.go` | the two cassette decks |
+| `printer.go` | the printer on the unit 4 |
+| `ieee488/` | the IEEE-488 bus and a peripheral with the addressing and the handshakes |
+| `cbmdos/` | the disk drive at the level of its DOS: channels, commands, D64, D80, D82 and host folders |
+| `storage/` | the tape formats: TAP, WAV and T64 |
 | `screenText.go` | the screen as text |
 | `resources.go`, `resources/` | the embedded ROMs |
 | `configuration.go`, `command.go` | options and the command channel |

@@ -35,11 +35,11 @@ func (c *commandSimple) getId() int {
 	return c.id
 }
 
-type commandLoadProgram struct {
+type commandLoadFile struct {
 	path string
 }
 
-func (c *commandLoadProgram) getId() int {
+func (c *commandLoadFile) getId() int {
 	return CommandComplex
 }
 
@@ -48,10 +48,10 @@ func (p *PET) SendCommand(commandId int) {
 	p.commandChannel <- &commandSimple{commandId}
 }
 
-// SendLoadProgram loads a program from another goroutine, reporting the
-// errors on the console
-func (p *PET) SendLoadProgram(path string) {
-	p.commandChannel <- &commandLoadProgram{path}
+// SendLoadFile loads a program, a tape or a disk from another goroutine,
+// see LoadFile, reporting the errors on the console
+func (p *PET) SendLoadFile(path string) {
+	p.commandChannel <- &commandLoadFile{path}
 }
 
 // drainCommands executes the queued commands. It returns if the emulation
@@ -62,6 +62,9 @@ func (p *PET) drainCommands() (kill bool, resync bool) {
 		case c := <-p.commandChannel:
 			switch c.getId() {
 			case CommandKill:
+				if err := p.Close(); err != nil {
+					fmt.Println(err)
+				}
 				return true, resync
 			case CommandPause:
 				p.paused.Store(true)
@@ -88,8 +91,8 @@ func (p *PET) drainCommands() (kill bool, resync bool) {
 			case CommandReset:
 				p.reset()
 			case CommandComplex:
-				if load, ok := c.(*commandLoadProgram); ok {
-					if err := p.LoadProgram(load.path); err != nil {
+				if load, ok := c.(*commandLoadFile); ok {
+					if err := p.LoadFile(load.path); err != nil {
 						fmt.Printf("Error loading %v: %v\n", load.path, err)
 					}
 				}
