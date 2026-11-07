@@ -1,0 +1,8 @@
+.vscode
+.DS_Store
+.claude
+frontend/headless/headless
+frontend/petebiten/petebiten
+frontend/*/*.prg
+frontend/*/*.png
+coverage.out
