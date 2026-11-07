@@ -65,6 +65,7 @@ func waitForCursor(t *testing.T, p *izpet.PET, after string) {
 	if p.Is80Columns() {
 		columns = 80
 	}
+	waitForText(t, p, after, 600)
 	lines := strings.Split(strings.ToUpper(p.GetScreenText()), "\n")
 	row := -1
 	for i, line := range lines {
@@ -79,4 +80,70 @@ func waitForCursor(t *testing.T, p *izpet.PET, after string) {
 	if !p.RunUntil(120, func() bool { return p.Peek(address)&0x80 != 0 }) {
 		t.Fatalf("the cursor is not shown")
 	}
+}
+
+// pressKey presses a key, with shift when asked, for a few frames and lets
+// it go, as a hand would
+func pressKey(p *izpet.PET, key izpet.Key, shift bool) {
+	if shift {
+		p.PutKey(izpet.KeyShiftLeft, true)
+	}
+	p.PutKey(key, true)
+	p.RunFrames(3)
+	p.PutKey(key, false)
+	if shift {
+		p.PutKey(izpet.KeyShiftLeft, false)
+	}
+	p.RunFrames(3)
+}
+
+// pressKeys presses a key a number of times
+func pressKeys(p *izpet.PET, key izpet.Key, shift bool, times int) {
+	for i := 0; i < times; i++ {
+		pressKey(p, key, shift)
+	}
+}
+
+// typeText types a text and waits until it is typed. The letters are typed
+// unshifted, uppercase in the graphics mode, as BASIC wants them.
+func typeText(t *testing.T, p *izpet.PET, text string) {
+	t.Helper()
+	p.TypeText(text)
+	waitTyped(t, p)
+}
+
+// typeExact types the characters as they are: the lowercase letters
+// unshifted and the uppercase ones with shift, the graphics in the graphics
+// mode
+func typeExact(t *testing.T, p *izpet.PET, text string) {
+	t.Helper()
+	for _, ch := range text {
+		if !p.PutChar(ch) {
+			t.Fatalf("no key for %q", ch)
+		}
+	}
+	waitTyped(t, p)
+}
+
+func waitTyped(t *testing.T, p *izpet.PET) {
+	t.Helper()
+	if !p.RunUntil(60*60*5, func() bool { return !p.IsTyping() }) {
+		t.Fatal("typing did not end")
+	}
+}
+
+// lineOf returns the row of the screen with a text, the last one if there
+// are several
+func lineOf(t *testing.T, p *izpet.PET, text string) int {
+	t.Helper()
+	row := -1
+	for i, line := range strings.Split(strings.ToUpper(p.GetScreenText()), "\n") {
+		if strings.Contains(line, strings.ToUpper(text)) {
+			row = i
+		}
+	}
+	if row < 0 {
+		t.Fatalf("'%v' not found on the screen", text)
+	}
+	return row
 }

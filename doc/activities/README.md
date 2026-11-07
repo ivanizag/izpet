@@ -19,3 +19,10 @@ All you need is izpet: the ROMs of every model are inside it.
 Seven models, from the first PET 2001 with its calculator keyboard to the 80
 columns of the CBM 8032: what each one says when it is switched on, how much
 memory it leaves to BASIC, and the keyboard it came with.
+
+### [Your first program](first-program.md)
+
+<a href="first-program.md"><img src="images/first-program/howdy.png" width="320" alt="A program in BASIC"></a>
+
+Commands run at once, a program typed, run and listed, a line of it changed
+right on the screen, and a program that runs for ever stopped with RUN/STOP.

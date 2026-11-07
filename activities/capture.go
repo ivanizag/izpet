@@ -181,9 +181,21 @@ func (r *Recording) Run(frames int, every int) {
 	}
 }
 
-// Type types a text, with pictures while it is typed
+// Type types a text, with pictures while it is typed. The letters are
+// typed unshifted, see izpet.PET.TypeText.
 func (r *Recording) Type(text string, every int) {
 	r.p.TypeText(text)
+	for r.p.IsTyping() {
+		r.Run(every, every)
+	}
+}
+
+// TypeExact types the characters as they are, the uppercase letters with
+// shift, with pictures while it is typed. See izpet.PET.PutChar.
+func (r *Recording) TypeExact(text string, every int) {
+	for _, ch := range text {
+		r.p.PutChar(ch)
+	}
 	for r.p.IsTyping() {
 		r.Run(every, every)
 	}
