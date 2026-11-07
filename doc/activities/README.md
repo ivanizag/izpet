@@ -26,3 +26,11 @@ memory it leaves to BASIC, and the keyboard it came with.
 
 Commands run at once, a program typed, run and listed, a line of it changed
 right on the screen, and a program that runs for ever stopped with RUN/STOP.
+
+### [Drawing with the keyboard](drawing.md)
+
+<a href="drawing.md"><img src="images/drawing/box.png" width="320" alt="A box drawn with the graphics characters"></a>
+
+The graphics characters on the keys, typed with SHIFT: a box, text in reverse,
+the famous one line maze, and characters written straight into the memory of
+the screen.

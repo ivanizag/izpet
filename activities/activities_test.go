@@ -21,4 +21,5 @@ func TestActivityScreenshots(t *testing.T) {
 	}
 	t.Run("models", modelsScreenshots)
 	t.Run("first-program", firstProgramScreenshots)
+	t.Run("drawing", drawingScreenshots)
 }
