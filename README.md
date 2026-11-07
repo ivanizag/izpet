@@ -5,6 +5,11 @@ izpet is a Commodore PET and CBM emulator written in Go, in the style of
 [izmac](https://github.com/ivanizag/izmac). The 6502 is emulated by
 [iz6502](https://github.com/ivanizag/iz6502).
 
+## Things to do
+
+The [activities](doc/activities/README.md) walk through what using a PET was
+like, step by step, with the pictures of what the machine shows on the way.
+
 ## Models
 
 | Model | Description |
@@ -36,6 +41,13 @@ The ROMs are embedded in the program, there is nothing to download.
 
 Not yet: the 8096 and 8296.
 See [doc/plan.md](doc/plan.md).
+
+The [`activities`](activities) package makes the pictures of the
+[activities](doc/activities/README.md):
+
+```bash
+IZPET_ACTIVITY_SCREENSHOTS=1 go test -count=1 -run TestActivityScreenshots ./activities
+```
 
 ## Running
 

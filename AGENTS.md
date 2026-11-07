@@ -102,4 +102,6 @@ screen back as text with `GetScreenText`. The helpers are in `petTester_test.go`
 | `frontend/petebiten/` | the ebiten frontend |
 | `frontend/shared/` | what the frontends share and the emulator has no place for: the keyboard diagrams, their layouts in key units and their drawing |
 | `frontend/headless/` | the headless frontend |
+| `activities/` | the album, the frame and the recordings of the activities, and their generator in the tests |
+| `doc/activities/` | the activities, see `doc/activities/EDITORIAL.md` before writing one |
 | `doc/` | the plan and the hardware notes |
