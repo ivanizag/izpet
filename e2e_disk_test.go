@@ -51,7 +51,8 @@ func TestDiskBasic4Commands(t *testing.T) {
 	testRun(t, p, "DSAVE \"DS\"", "READY.")
 	testRun(t, p, "DIRECTORY", "BLOCKS FREE.")
 	screen := strings.ToUpper(p.GetScreenText())
-	if !strings.Contains(screen, "\"WORK            \" AB 2C") ||
+	// The header is in reverse, its spaces are blocks
+	if !strings.Contains(screen, "\"WORK████████████\"█AB█2C") ||
 		!strings.Contains(screen, "\"DS\"") || !strings.Contains(screen, "2051 BLOCKS FREE.") {
 		t.Errorf("unexpected directory:\n%v", screen)
 	}
