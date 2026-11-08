@@ -63,6 +63,15 @@ The monitor in the ROM: the registers of the processor, the memory in
 hexadecimal, a routine typed byte by byte that fills the screen eight hundred
 times faster than BASIC.
 
+### [Three versions of BASIC](basic-versions.md)
+
+<a href="basic-versions.md"><img src="images/basic-versions/microsoft.png" width="320" alt="MICROSOFT! on BASIC 2"></a>
+
+BASIC 1, 2 and 4 side by side: the lowercase letters of the 2001, the disks
+that BASIC 1 could not use, the message Bill Gates hid behind `WAIT 6502,1`,
+and a garbage collection that takes 30 seconds on BASIC 2 and a fifth of a
+second on BASIC 4.
+
 ## Business
 
 ### [Writing a letter with WordPro](wordpro.md)
