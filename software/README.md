@@ -8,3 +8,4 @@ izpet.
 |---|---|---|
 | `wordpro4.d64` | WordPro 4 by Steve Punter, as "WORDPRO 4", and other versions and example letters, on a 4040 disk | `wordpro4plus.d64.gz` of the [zimmers.net PET productivity archive](https://www.zimmers.net/anonftp/pub/cbm/pet/prod/), uncompressed |
 | `visicalc.d64` | VisiCalc 1.70AM for the 40 and 80 columns PETs, in versions that do not need the ROM chip the original came with, and the loader "VC←STARTER" | `visicalc-norom.d64.gz` of the [zimmers.net PET productivity archive](https://www.zimmers.net/anonftp/pub/cbm/pet/prod/), uncompressed |
+| `microchess.prg` | Microchess 2.0 by Peter Jennings, (C) 1978 Micro-Ware, in machine language from the address 768, started with `SYS 1039` | `microchess.prg` of the [zimmers.net PET games archive](https://www.zimmers.net/anonftp/pub/cbm/pet/games/english/) |
