@@ -8,8 +8,8 @@ github.com/ebitengine/purego v0.9.0 h1:mh0zpKBIXDceC63hpvPuGLiJ8ZAa3DfrFTudmfi8A
 github.com/ebitengine/purego v0.9.0/go.mod h1:iIjxzd6CiRiOG0UyXP+V1+jWqUXVjPKLAI0mRfJZTmQ=
 github.com/hajimehoshi/ebiten/v2 v2.9.9 h1:JdDag6Ndj12iD4lxQGG8kbsrh7ssj4Sbzth6r929H/M=
 github.com/hajimehoshi/ebiten/v2 v2.9.9/go.mod h1:DAt4tnkYYpCvu3x9i1X/nK/vOruNXIlYq/tBXxnhrXM=
-github.com/ivanizag/iz6502 v1.5.0 h1:hWNfjuZHbSjBZr1lzlFNgF6O1gCI/1NIHaQwa+W2+cQ=
-github.com/ivanizag/iz6502 v1.5.0/go.mod h1:h4gbw3IK6WCYawi00kBhQ4ACeQkGWgqbUeAgDaQpy6s=
+github.com/ivanizag/iz6502 v1.5.1-0.20261108160439-b27e49f8b105 h1:DmY+XepYwVB2aySNeTUhkgqBlcYMwpPf+FbBW7Rv3Og=
+github.com/ivanizag/iz6502 v1.5.1-0.20261108160439-b27e49f8b105/go.mod h1:h4gbw3IK6WCYawi00kBhQ4ACeQkGWgqbUeAgDaQpy6s=
 github.com/jezek/xgb v1.1.1 h1:bE/r8ZZtSv7l9gk6nU0mYx51aXrvnyb44892TwSaqS4=
 github.com/jezek/xgb v1.1.1/go.mod h1:nrhwO0FX/enq75I7Y7G8iN1ubpSGZEiA3v9e9GyRFlk=
 golang.org/x/image v0.31.0 h1:mLChjE2MV6g1S7oqbXC0/UcKijjm5fnJLUYKIYrLESA=
