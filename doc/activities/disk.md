@@ -42,11 +42,23 @@ where the letters typed without SHIFT show in uppercase.
    and an id of two characters, `01`, on the drive 0. BASIC asks first,
    since formatting a disk erases what was on it.
 
-2. **Type `directory`.** The directory of the disk, its name and id in reverse
-   on top, and the space left in blocks of 254 bytes: 2052 on an empty 8050
-   disk.
+2. **Type `directory`.** The directory of the disk, with its header in reverse
+   on top and the space left in blocks of 254 bytes under it: 2052 on an
+   empty 8050 disk.
 
    ![A new disk](images/disk/header.png)
+
+   The header is `0 "work            " 01 2c`. The `0` is the drive, where the
+   lines of the files have their size in blocks, and `work` the name of the
+   disk. After the name come two pairs of characters:
+
+   - `01` is the id of the disk, the `i01` of `header`. The drive kept parts
+     of a disk in its memory and told the disks apart by their ids, so each
+     disk was to have an id of its own.
+   - `2c` is the version of the DOS and the format of the disk: `2` for the
+     version 2 of the DOS, and `c` for the format of the 8050 and 8250
+     disks. The disks of the 4040, D64 in izpet, have `2a`, and a drive only
+     writes on the disks of a format it knows.
 
 ## Programs
 
