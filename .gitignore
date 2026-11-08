@@ -6,3 +6,11 @@ frontend/petebiten/petebiten
 frontend/*/*.prg
 frontend/*/*.png
 coverage.out
+/*.d64
+/*.d80
+/*.d82
+/*.tap
+/*.wav
+/*.t64
+/*.prg
+/*.txt
