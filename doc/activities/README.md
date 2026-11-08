@@ -96,3 +96,11 @@ raised with the time the PET takes to think.
 A text adventure in BASIC, from a magazine listing of 1979: the story, a
 walk off the ship in commands of two words, the things picked up, and the
 game saved on a disk and loaded back.
+
+### [Playing Space Invaders](space-invaders.md)
+
+<a href="space-invaders.md"><img src="images/space-invaders/mystery.png" width="320" alt="Space Invaders"></a>
+
+The arcade game on a 3032, drawn with the graphics characters: how to wire
+the sound, the title and its demo, and a whole game: the invaders shot, the
+mystery ship, and game over.
