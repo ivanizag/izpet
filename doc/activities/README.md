@@ -62,3 +62,12 @@ drive, and a folder of your computer used as a disk.
 The monitor in the ROM: the registers of the processor, the memory in
 hexadecimal, a routine typed byte by byte that fills the screen eight hundred
 times faster than BASIC.
+
+## Business
+
+### [Writing a letter with WordPro](wordpro.md)
+
+<a href="wordpro.md"><img src="images/wordpro/stored.png" width="320" alt="A letter in WordPro"></a>
+
+The word processor of the 8032: a letter typed, its margins and justification
+set with a format line, kept on a disk and printed.
