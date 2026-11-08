@@ -80,14 +80,15 @@ again from a clean one.
 
 7. **Type `SAVE` and RETURN, press RETURN twice more, then type `FALCON`
    and RETURN.** The game asks for tape or disk, D, the drive, 0, and a
-   title, and the two RETURNs take the answers it offers. It writes where you are and
-   what you carry in a file called `FALCON` on the disk, and ends.
+   title, and the two RETURNs take the answers it offers. It writes where
+   you are and what you carry in a file called `FALCON` on the disk, and
+   ends.
 
    ![The game saved](images/dog-star/saved.png)
 
 8. **Type `RUN`, `N` for no instructions, then `LOAD` and RETURN, RETURN
-   twice more and `FALCON` and RETURN.** The game reads the file back, and you are in the supply
-   depot again, with the fuel and the blaster.
+   twice more and `FALCON` and RETURN.** The game reads the file back, and
+   you are in the supply depot again, with the fuel and the blaster.
 
    ![The game loaded](images/dog-star/loaded.png)
 
