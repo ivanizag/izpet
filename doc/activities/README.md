@@ -78,3 +78,13 @@ set with a format line, kept on a disk and printed.
 
 The first spreadsheet: a budget with a sum, a cost changed and the total
 recalculated at once, the sheet saved on a disk and printed.
+
+## Games
+
+### [Playing Space Invaders](space-invaders.md)
+
+<a href="space-invaders.md"><img src="images/space-invaders/game.png" width="320" alt="Space Invaders"></a>
+
+The arcade game on a 3032, drawn with the graphics characters: how to wire
+the sound, the title and its demo, and a game with the ship moving and
+firing.

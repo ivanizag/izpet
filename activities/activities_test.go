@@ -27,4 +27,5 @@ func TestActivityScreenshots(t *testing.T) {
 	t.Run("monitor", monitorScreenshots)
 	t.Run("wordpro", wordProScreenshots)
 	t.Run("visicalc", visiCalcScreenshots)
+	t.Run("space-invaders", spaceInvadersScreenshots)
 }
