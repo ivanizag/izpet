@@ -28,13 +28,17 @@ go run ./frontend/petebiten -model 8032 -disk visicalc.d64 -disk1 sheets.d64 -pr
 
 `sheets.d64` and `printed.txt` do not need to exist.
 
+The 8032 starts with the lowercase letters: type the commands and keys of
+this page without SHIFT, as they are written here. A letter typed with SHIFT,
+or with Caps Lock on, is an uppercase letter, another character for the PET.
+
 ## Starting VisiCalc
 
 1. **Load and run the loader:**
 
    ```basic
-   DLOAD "VC*"
-   RUN
+   dload "vc*"
+   run
    ```
 
    The loader reads VisiCalc for 80 columns from the disk, about 20 seconds,
@@ -47,29 +51,29 @@ go run ./frontend/petebiten -model 8032 -disk visicalc.d64 -disk1 sheets.d64 -pr
 
 ## The budget
 
-2. **Go to a cell with `>` and its name, type what goes in it and press
+2. **Go to a cell with `>` and its name, `>a1` for A1, type what goes in it and press
    RETURN**, for each of these:
 
    | Go to | Type |
    |---|---|
-   | `>A1` | `budget` |
-   | `>A3` | `rent` |
-   | `>B3` | `400` |
-   | `>A4` | `food` |
-   | `>B4` | `250` |
-   | `>A5` | `car` |
-   | `>B5` | `120` |
-   | `>A6` | `phone` |
-   | `>B6` | `30` |
-   | `>A8` | `total` |
-   | `>B8` | `@sum(b3.b6)` |
+   | `>a1` | `budget` |
+   | `>a3` | `rent` |
+   | `>b3` | `400` |
+   | `>a4` | `food` |
+   | `>b4` | `250` |
+   | `>a5` | `car` |
+   | `>b5` | `120` |
+   | `>a6` | `phone` |
+   | `>b6` | `30` |
+   | `>a8` | `total` |
+   | `>b8` | `@sum(b3.b6)` |
 
    What starts with a letter is a label, a text; what starts with a digit or
    `@` is a value. `@SUM(B3...B6)` is the sum of the cells from B3 to B6, the
    period typed between them shown as three. The arrow keys move the cursor
    too.
 
-3. **Go to `>A7`, type `/--` and RETURN, and the same in `>B7`.** `/-` makes
+3. **Go to `>a7`, type `/--` and RETURN, and the same in `>b7`.** `/-` makes
    a label that repeats what follows across the whole cell, here a line under
    the costs.
 
@@ -77,7 +81,7 @@ go run ./frontend/petebiten -model 8032 -disk visicalc.d64 -disk1 sheets.d64 -pr
 
 ## What if
 
-4. **Go to `>B4`, type `300` and press RETURN.** The food goes up, and the
+4. **Go to `>b4`, type `300` and press RETURN.** The food goes up, and the
    total with it, at once: every value that depends on B4 is calculated
    again.
 
@@ -85,17 +89,18 @@ go run ./frontend/petebiten -model 8032 -disk visicalc.d64 -disk1 sheets.d64 -pr
 
 ## Saving and printing
 
-5. **Type `/S`.** The commands start with `/`, and each asks for the next
+5. **Type `/s`.** The commands start with `/`, and each asks for the next
    letter on the second line: `/S` is storage, with `L` to load, `S` to
    save, `D` to delete, `I` to initialize a disk, `Q` to quit VisiCalc and
-   `#` for files other programs could read.
+   `#` for files other programs could read. The letters are typed without
+   SHIFT, as all the commands.
 
    ![The storage command](images/visicalc/storage.png)
 
-6. **Type `S`, then `1:budget.vc` and RETURN.** The sheet is saved on the
+6. **Type `s`, then `1:budget.vc` and RETURN.** The sheet is saved on the
    drive 1, as a file `budget.vc`.
 
-7. **Go to `>A1`, type `/PP`, `B8` and RETURN.** `/P` prints from the cell
+7. **Go to `>a1`, type `/pp`, `b8` and RETURN.** `/P` prints from the cell
    of the cursor to the one typed, here A1 to B8, on a PET printer, the
    second `P`. izpet's printer writes it to `printed.txt`:
 

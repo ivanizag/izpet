@@ -27,16 +27,22 @@ go run ./frontend/petebiten -model 8032 -disk work.d80 -disk1 myfolder
 extension of the file says the drive: `.d80` is an 8050 disk, `.d64` a 4040
 one and `.d82` an 8250 one.
 
-The 8032 starts in lowercase, and BASIC takes its commands in lowercase too.
+The 8032 starts with the lowercase letters, and BASIC wants its commands
+typed without SHIFT, so they show in lowercase, as they are written on this
+page. A letter typed with SHIFT, or with Caps Lock on, is an uppercase letter,
+another character for the PET: BASIC does not know `HEADER` written with them,
+and answers `?SYNTAX ERROR`, and a file name typed with them is not the same
+name. `PRINT CHR$(142)`, typed without SHIFT, switches to the uppercase set,
+where the letters typed without SHIFT show in uppercase.
 
 ## A new disk
 
-1. **Format the disk with `HEADER "WORK",D0,I01`, and answer `Y`.** A new
-   disk had to be formatted before use: `HEADER` gives it a name, `WORK`,
+1. **Format the disk with `header "work",d0,i01`, and answer `y`.** A new
+   disk had to be formatted before use: `HEADER` gives it a name, `work`,
    and an id of two characters, `01`, on the drive 0. BASIC asks first,
    since formatting a disk erases what was on it.
 
-2. **Type `DIRECTORY`.** The directory of the disk, its name and id in reverse
+2. **Type `directory`.** The directory of the disk, its name and id in reverse
    on top, and the space left in blocks of 254 bytes: 2052 on an empty 8050
    disk.
 
@@ -44,16 +50,16 @@ The 8032 starts in lowercase, and BASIC takes its commands in lowercase too.
 
 ## Programs
 
-3. **Type a program, save it with `DSAVE "HELLO"`, then `NEW`, `DIRECTORY`,
-   `DLOAD "HELLO"` and `RUN`.**
+3. **Type a program, save it with `dsave "hello"`, then `new`, `directory`,
+   `dload "hello"` and `run`.**
 
    ```basic
-   10 PRINT "HELLO FROM THE DISK"
-   DSAVE "HELLO"
-   NEW
-   DIRECTORY
-   DLOAD "HELLO"
-   RUN
+   10 print "hello from the disk"
+   dsave "hello"
+   new
+   directory
+   dload "hello"
+   run
    ```
 
    The program is in the directory, a `PRG` file of one block, and `DLOAD`
@@ -67,33 +73,33 @@ The 8032 starts in lowercase, and BASIC takes its commands in lowercase too.
    write in it, and `DCLOSE`:
 
    ```basic
-   NEW
-   10 DOPEN#1,"NOTES",W
-   20 PRINT#1,"BUY MORE DISKS"
-   30 DCLOSE#1
-   RUN
+   new
+   10 dopen#1,"notes",w
+   20 print#1,"buy more disks"
+   30 dclose#1
+   run
    ```
 
 5. **Read it back** with `DOPEN` and `INPUT#`:
 
    ```basic
-   NEW
-   10 DOPEN#1,"NOTES"
-   20 INPUT#1,A$
-   30 DCLOSE#1
-   40 PRINT A$
-   RUN
+   new
+   10 dopen#1,"notes"
+   20 input#1,a$
+   30 dclose#1
+   40 print a$
+   run
    ```
 
    ![A data file read back](images/disk/notes.png)
 
-   `NOTES` is a `SEQ` file, a sequential file, read in the order it was
+   `notes` is a `SEQ` file, a sequential file, read in the order it was
    written. Mailing lists, accounts and the letters of a word processor were
    kept in files like this one.
 
 ## When something goes wrong
 
-6. **Type `DLOAD "NOTHING"`, then `PRINT DS$`.** `DS$` is the status of the
+6. **Type `dload "nothing"`, then `print ds$`.** `DS$` is the status of the
    drive, as its DOS gives it: a number, a message, and the track and sector
    where it happened. 62 is a file not found. After any disk command a
    program could look at `DS` and `DS$` to see whether it worked.
@@ -102,8 +108,8 @@ The 8032 starts in lowercase, and BASIC takes its commands in lowercase too.
 
 ## Keeping the disk tidy
 
-7. **Type `RENAME "HELLO" TO "GREETING"`, `SCRATCH "NOTES"`, answer `Y`, and
-   `DIRECTORY`.** `SCRATCH` deletes a file, and says how many it deleted.
+7. **Type `rename "hello" to "greeting"`, `scratch "notes"`, answer `y`, and
+   `directory`.** `SCRATCH` deletes a file, and says how many it deleted.
 
    ![A file renamed and one scratched](images/disk/scratch.png)
 
@@ -112,9 +118,9 @@ The 8032 starts in lowercase, and BASIC takes its commands in lowercase too.
 8. **Load the program and save it in the drive 1, then list it:**
 
    ```basic
-   DLOAD "GREETING"
-   DSAVE "GREETING",D1
-   DIRECTORY D1
+   dload "greeting"
+   dsave "greeting",d1
+   directory d1
    ```
 
    The drive 1 is the folder `myfolder`, and the program is in it as

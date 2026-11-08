@@ -25,6 +25,10 @@ go run ./frontend/petebiten -model 8032 -disk wordpro4.d64 -disk1 letters.d64 -p
 `letters.d64` and `printed.txt` do not need to exist: the disk is created
 when WordPro writes on it, and the file when something is printed.
 
+The 8032 starts with the lowercase letters: type the commands and keys of
+this page without SHIFT, as they are written here. A letter typed with SHIFT,
+or with Caps Lock on, is an uppercase letter, another character for the PET.
+
 WordPro uses the OFF/RVS key as a control key, the F3 key in izpet: it is
 pressed, and let go, before the key of a command.
 
@@ -33,8 +37,8 @@ pressed, and let go, before the key of a command.
 1. **Load and run it:**
 
    ```basic
-   DLOAD "WORDPRO 4"
-   RUN
+   dload "wordpro 4"
+   run
    ```
 
    WordPro asks how much of the memory to use for the main text, in lines.
@@ -44,7 +48,7 @@ pressed, and let go, before the key of a command.
    ![WordPro starting](images/wordpro/start.png)
 
 2. **Answer the questions:** `150` and RETURN for the main text, RETURN for
-   the printer on the device 4, `P` for a Commodore printer, and RETURN for
+   the printer on the device 4, `p` for a Commodore printer, and RETURN for
    the disk drive on the device 8.
 
 ## The letter
@@ -69,7 +73,8 @@ pressed, and let go, before the key of a command.
    Ada
    ```
 
-   The arrow `←` marks where RETURN was pressed. WordPro does not wrap the
+   The capitals of the letter are typed with SHIFT, as on a typewriter. The
+   arrow `←` marks where RETURN was pressed. WordPro does not wrap the
    words on the screen: the lines of the screen are cut at 80 columns, and
    the paragraphs are made into lines of the width of the paper when it
    prints. The status line, on top, has the column and the line of the
@@ -79,8 +84,8 @@ pressed, and let go, before the key of a command.
 
 ## Keeping it on the disk
 
-5. **Press SHIFT and CLR/HOME, `M`, `1`, type `letter` and press RETURN.**
-   SHIFT and CLR/HOME is the key of the disk commands, `M` memorizes, saves,
+5. **Press SHIFT and CLR/HOME, `m`, `1`, type `letter` and press RETURN.**
+   SHIFT and CLR/HOME is the key of the disk commands, `m` memorizes, saves,
    the text, on the drive 1. The status line says `Stored - 00`, the error
    status of the drive: 00 is no error.
 
@@ -91,14 +96,14 @@ pressed, and let go, before the key of a command.
 
    ![The directory](images/wordpro/directory.png)
 
-7. **Press SHIFT and CLR/HOME, `R`, type `1:letter` and press RETURN.** `R`
+7. **Press SHIFT and CLR/HOME, `r`, type `1:letter` and press RETURN.** `r`
    recalls, loads, a text, with the drive written before its name.
 
    ![The letter recalled](images/wordpro/recalled.png)
 
 ## Printing
 
-8. **Press OFF/RVS, `O` and RETURN.** `O` sends the text to the printer, and
+8. **Press OFF/RVS, `o` and RETURN.** `o` sends the text to the printer, and
    izpet's writes what it prints to `printed.txt`:
 
    ```

@@ -73,6 +73,13 @@ software of the time was printed in books and magazines and typed in.
   it, and say how to reach it from a modern keyboard when it is not obvious:
   RUN/STOP is Escape, RVS is F3. The printable characters are typed as they
   are, whatever the layout.
+- **Write what is typed as it is typed.** On the models that start with the
+  lowercase letters, the 8032 and the business ones, BASIC wants its
+  commands typed without SHIFT and they show in lowercase: write them in
+  lowercase, and say so in "What you need". A reader who types them in
+  uppercase, with SHIFT or Caps Lock, gets `?SYNTAX ERROR`. On the models
+  that start with the uppercase letters, write them in uppercase, the
+  letters typed without SHIFT show so.
 - **Command lines go in `bash` blocks**, followed by a sentence on each
   option that matters.
 - **Dates, prices and names are claims too.** Say only what is sure, or leave
