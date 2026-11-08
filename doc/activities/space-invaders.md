@@ -11,7 +11,8 @@ graphics characters, two or three of them each, and the sound comes out of a
 single line of the user port.
 
 This page plays one of them on a 3032: the screen that tells how to hear it,
-the title and its demo, and a game. The copy has no name of its author.
+the title and its demo, and a whole game, from the first shot to the last
+ship lost. The copy has no name of its author.
 
 ## What you need
 
@@ -65,6 +66,33 @@ izpet loads the program when BASIC is ready and runs it.
    invaders move by whole characters, eight pixels at a time, the only way
    with no graphics mode; changing the character of an invader on each step
    is what makes them walk.
+
+5. **Watch the top of the screen.** Now and then the mystery ship crosses
+   the top row, above the invaders.
+
+   ![The mystery ship](images/space-invaders/mystery.png)
+
+   Shoot it and its points are written where it was, 150 this time. The
+   table of the title gives no value for it, only *?MYSTERY*: in other games
+   it was worth 100 and 300.
+
+   ![The mystery ship shot](images/space-invaders/hit.png)
+
+## The end
+
+6. **Play until the last ship is hit.** The bombs take the ships one by one,
+   and when the last one goes the game writes GAME OVER under the score. The
+   score becomes the high score if it beats it.
+
+   ![Game over](images/space-invaders/over.png)
+
+7. **Wait.** After a couple of seconds the title comes back, with the score
+   and the high score still on the top line, and the table of points is
+   written again, now with its last line: TOP 1500 POINTS FOR EXTRA BASE.
+   A key starts another game, and the high score stays from one game to the
+   next.
+
+   ![The title again](images/space-invaders/again.png)
 
 ## What next
 

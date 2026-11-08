@@ -2,6 +2,7 @@ package activities
 
 import (
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/ivanizag/izpet"
@@ -18,25 +19,93 @@ func invadersShip(p *izpet.PET) int {
 	return -1
 }
 
-// invadersPlay plays for some frames, recorded, a step every few of them:
-// the ship goes to the column of the step and fires. The keys 4 and 6 move
-// it and A fires.
-func invadersPlay(p *izpet.PET, r *Recording, frames int, target func(step int) int) {
-	const every = 3
-	for step := 0; step*every < frames; step++ {
-		ship, to := invadersShip(p), target(step)
-		p.PutKey('4', ship >= 0 && ship+2 > to)
-		p.PutKey('6', ship >= 0 && ship+2 < to)
-		p.PutKey('A', step%4 < 2)
-		r.Run(every, every)
+// invadersBomb returns true for the screen codes of the bombs
+func invadersBomb(ch uint8) bool {
+	return ch == '$' || ch == '*' || ch == 0x5d || ch == 0x47
+}
+
+/*
+invadersTarget is the column the left of the ship goes to: the nearest
+column of invaders, or away from a bomb falling near it. With no invader
+in sight it drifts to the right.
+*/
+func invadersTarget(p *izpet.PET, ship int) int {
+	target, distance := ship+1, 40
+	for c := 0; c < 40; c++ {
+		for r := 2; r < 17; r++ {
+			ch := p.Peek(uint16(0x8000 + r*40 + c))
+			if ch == 0x20 || invadersBomb(ch) {
+				continue
+			}
+			if d := max(c-ship, ship-c); d < distance {
+				target, distance = c, d
+			}
+			break
+		}
 	}
-	p.ReleaseAllKeys()
+	for c := max(ship-1, 0); c <= min(ship+4, 39); c++ {
+		for r := 17; r < 23; r++ {
+			if invadersBomb(p.Peek(uint16(0x8000 + r*40 + c))) {
+				if c > ship {
+					return ship - 2
+				}
+				return ship + 4
+			}
+		}
+	}
+	return target
+}
+
+// invadersPlayer plays a game, firing every other step
+type invadersPlayer struct {
+	p    *izpet.PET
+	step int
+}
+
+/*
+play plays a step every few frames until done says so, recorded when there
+is a recording: the keys 4 and 6 move the ship and A fires. The keys are
+left as they are, for the next call.
+*/
+func (i *invadersPlayer) play(r *Recording, done func() bool) {
+	const every = 3
+	p := i.p
+	for ; !done(); i.step++ {
+		ship := invadersShip(p)
+		to := invadersTarget(p, ship)
+		p.PutKey('4', ship >= 0 && ship > to)
+		p.PutKey('6', ship >= 0 && ship < to)
+		p.PutKey('A', i.step%2 == 0)
+		if r != nil {
+			r.Run(every, every)
+		} else {
+			p.RunFrames(every)
+		}
+	}
+}
+
+// invadersPoints returns the points of the mystery ship shot, the number
+// on the second row of the screen, or "" when there is none
+func invadersPoints(p *izpet.PET) string {
+	var row strings.Builder
+	for c := 0; c < 40; c++ {
+		if ch := p.Peek(uint16(0x8000 + 40 + c)); ch >= '0' && ch <= '9' {
+			row.WriteByte(ch)
+		}
+	}
+	return row.String()
+}
+
+// invadersScore is the score on the top left, and the ships left
+func invadersScore(p *izpet.PET) (string, uint8) {
+	return p.GetScreenText()[6:10], p.Peek(0x8000 + 29)
 }
 
 /*
 spaceInvadersScreenshots is a game of Space Invaders on a 3032: how to hear
-it, the title and the demo, the game started and a recording of the ship
-moving and firing, its end the picture of the page
+it, the title and the demo, a recording of the game, the mystery ship seen
+and shot, game over and the title again. The game goes the same way every
+time, the player does what it sees on the screen.
 */
 func spaceInvadersScreenshots(t *testing.T) {
 	const page, label = "space-invaders", "CBM 3032"
@@ -61,18 +130,36 @@ func spaceInvadersScreenshots(t *testing.T) {
 	p.RunFrames(30)
 	must(t, album.ScreenshotOf(p, "push", label))
 
-	// The game, the ship going from side to side and firing
+	// The game, the ship going for the invaders and away from the bombs
 	pressKey(p, izpet.KeySpace, false)
 	p.RunFrames(120)
-	sweep := func(step int) int {
-		x := (step / 2) % 60
-		if x >= 30 {
-			x = 60 - x
-		}
-		return 5 + x
-	}
+	player := invadersPlayer{p: p}
 	playing := Record(p, label)
-	invadersPlay(p, playing, 60*20, sweep)
+	frames := 0
+	player.play(playing, func() bool { frames += 3; return frames > 60*20 })
 	must(t, album.SaveRecording(playing, "playing", 200))
-	must(t, album.ScreenshotOf(p, "game", label))
+
+	// The mystery ship, and later one shot, its points where it was
+	over := func() bool { _, ships := invadersScore(p); return ships == '0' }
+	player.play(nil, func() bool {
+		return over() || strings.Contains(p.GetScreenText(), "◤●●●◥")
+	})
+	must(t, album.ScreenshotOf(p, "mystery", label))
+	player.play(nil, func() bool {
+		return over() || invadersPoints(p) != ""
+	})
+	if over() {
+		t.Fatal("the game ended before the mystery ship was shot")
+	}
+	must(t, album.ScreenshotOf(p, "hit", label))
+
+	// The last ship lost, game over and the title again
+	player.play(nil, over)
+	p.ReleaseAllKeys()
+	waitForText(t, p, "GAME OVER", 300)
+	p.RunFrames(30)
+	must(t, album.ScreenshotOf(p, "over", label))
+	waitForText(t, p, "PLAY", 60*30)
+	p.RunFrames(30)
+	must(t, album.ScreenshotOf(p, "again", label))
 }

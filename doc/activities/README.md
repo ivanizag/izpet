@@ -83,8 +83,8 @@ recalculated at once, the sheet saved on a disk and printed.
 
 ### [Playing Space Invaders](space-invaders.md)
 
-<a href="space-invaders.md"><img src="images/space-invaders/game.png" width="320" alt="Space Invaders"></a>
+<a href="space-invaders.md"><img src="images/space-invaders/mystery.png" width="320" alt="Space Invaders"></a>
 
 The arcade game on a 3032, drawn with the graphics characters: how to wire
-the sound, the title and its demo, and a game with the ship moving and
-firing.
+the sound, the title and its demo, and a whole game: the invaders shot, the
+mystery ship, and game over.
