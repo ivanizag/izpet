@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/hajimehoshi/ebiten/v2 v2.9.9
-	github.com/ivanizag/iz6502 v1.5.0
+	github.com/ivanizag/iz6502 v1.5.1-0.20261108160439-b27e49f8b105
 	golang.org/x/image v0.31.0
 )
 
