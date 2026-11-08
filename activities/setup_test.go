@@ -63,6 +63,13 @@ func hasText(p *izpet.PET, text string) bool {
 // moves it.
 func waitForCursor(t *testing.T, p *izpet.PET, after string) {
 	t.Helper()
+	waitForCursorAt(t, p, after, 0)
+}
+
+// waitForCursorAt waits for the cursor as waitForCursor, on a column of the
+// line
+func waitForCursorAt(t *testing.T, p *izpet.PET, after string, column int) {
+	t.Helper()
 	columns := 40
 	if p.Is80Columns() {
 		columns = 80
@@ -79,7 +86,7 @@ func waitForCursor(t *testing.T, p *izpet.PET, after string) {
 		if row < 0 || row+1 >= 25 {
 			return false
 		}
-		return p.Peek(uint16(0x8000+(row+1)*columns))&0x80 != 0
+		return p.Peek(uint16(0x8000+(row+1)*columns+column))&0x80 != 0
 	}
 	if !p.RunUntil(600, shown) {
 		t.Fatalf("the cursor is not shown:\n%v", p.GetScreenText())

@@ -24,4 +24,5 @@ func TestActivityScreenshots(t *testing.T) {
 	t.Run("drawing", drawingScreenshots)
 	t.Run("cassette", cassetteScreenshots)
 	t.Run("disk", diskScreenshots)
+	t.Run("monitor", monitorScreenshots)
 }

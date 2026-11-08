@@ -52,3 +52,13 @@ took.
 The disk commands of BASIC 4 on an 8032 with an 8050: a disk formatted, a
 program saved and loaded, a data file written and read, the status of the
 drive, and a folder of your computer used as a disk.
+
+## Programming
+
+### [The machine language monitor](monitor.md)
+
+<a href="monitor.md"><img src="images/monitor/memory.png" width="320" alt="The monitor"></a>
+
+The monitor in the ROM: the registers of the processor, the memory in
+hexadecimal, a routine typed byte by byte that fills the screen eight hundred
+times faster than BASIC.
