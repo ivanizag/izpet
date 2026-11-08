@@ -8,8 +8,8 @@ import (
 	"github.com/ivanizag/izpet"
 )
 
-// microchessLine is the text of the last line of the right column with a
-// move, where Microchess writes its answer
+// microchessReply is the last move written in the right column, where
+// Microchess writes its answers
 func microchessReply(p *izpet.PET) string {
 	reply := ""
 	for _, line := range strings.Split(p.GetScreenText(), "\n") {
