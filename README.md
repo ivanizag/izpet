@@ -79,6 +79,7 @@ host keyboard. In the ebiten frontend:
 | F9 | ESC, on the business keyboard |
 | Insert | INST |
 | Home | HOME, with shift CLR |
+| Ctrl-V | Paste the text of the clipboard, also Cmd-V and Shift-Insert |
 | Arrows | the cursor keys |
 | Ctrl-F2 | Reset, F2 alone while the help is shown |
 | F4 | Show or hide the processor trace |
@@ -86,6 +87,11 @@ host keyboard. In the ebiten frontend:
 | F7 | Show or hide the keyboard |
 | F12 | Save the screen to a PNG file |
 | Pause | Pause |
+
+A text pasted is typed on the PET: a BASIC listing pasted at READY. is entered
+line by line. In the graphics mode the letters are typed unshifted, uppercase,
+whatever their case, as BASIC wants them; in the lowercase mode they are typed
+as they are.
 
 Drop a file on the window to use it: a program is loaded and run, a tape goes
 in the deck #1 and a disk in the drive.

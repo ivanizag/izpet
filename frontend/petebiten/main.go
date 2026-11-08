@@ -31,6 +31,7 @@ const helpMessage = `
           F9: ESC, business keyboard
       Insert: INST
         Home: HOME, with shift CLR
+      Ctrl-V: Paste, also Shift-Insert
 
  Click on the keys of the keyboard
  Drop a program, tape or disk to use it
