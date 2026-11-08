@@ -43,6 +43,14 @@ func (c *commandLoadFile) getId() int {
 	return CommandComplex
 }
 
+type commandPaste struct {
+	text string
+}
+
+func (c *commandPaste) getId() int {
+	return CommandComplex
+}
+
 // SendCommand enqueues a command to the emulator goroutine
 func (p *PET) SendCommand(commandId int) {
 	p.commandChannel <- &commandSimple{commandId}
@@ -52,6 +60,11 @@ func (p *PET) SendCommand(commandId int) {
 // see LoadFile, reporting the errors on the console
 func (p *PET) SendLoadFile(path string) {
 	p.commandChannel <- &commandLoadFile{path}
+}
+
+// SendPaste types a text from another goroutine, see paste
+func (p *PET) SendPaste(text string) {
+	p.commandChannel <- &commandPaste{text}
 }
 
 // drainCommands executes the queued commands. It returns if the emulation
@@ -91,10 +104,13 @@ func (p *PET) drainCommands() (kill bool, resync bool) {
 			case CommandReset:
 				p.reset()
 			case CommandComplex:
-				if load, ok := c.(*commandLoadFile); ok {
-					if err := p.LoadFile(load.path); err != nil {
-						fmt.Printf("Error loading %v: %v\n", load.path, err)
+				switch c := c.(type) {
+				case *commandLoadFile:
+					if err := p.LoadFile(c.path); err != nil {
+						fmt.Printf("Error loading %v: %v\n", c.path, err)
 					}
+				case *commandPaste:
+					p.paste(c.text)
 				}
 			}
 		default:

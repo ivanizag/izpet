@@ -18,6 +18,8 @@ the graphics in the graphics mode and the uppercase in the lowercase mode.
 
 The other keys are pressed by position for as long as they are held, with
 the PET shift if a shift of the host is down when they are pressed.
+
+Ctrl-V, Cmd-V and Shift-Insert paste the text of the clipboard.
 */
 type ebitenKeyboard struct {
 	p *izpet.PET
@@ -82,8 +84,14 @@ func (k *ebitenKeyboard) update() {
 	}
 
 	shift := ebiten.IsKeyPressed(ebiten.KeyShift)
+	pasting := shift && inpututil.IsKeyJustPressed(ebiten.KeyInsert) ||
+		control && inpututil.IsKeyJustPressed(ebiten.KeyV)
+	if pasting {
+		pasteClipboard(k.p)
+	}
+
 	for key, mapping := range k.keys {
-		if inpututil.IsKeyJustPressed(key) {
+		if inpututil.IsKeyJustPressed(key) && !(pasting && key == ebiten.KeyInsert) {
 			mapping.shift = mapping.shift || shift
 			k.press(key, mapping)
 		}

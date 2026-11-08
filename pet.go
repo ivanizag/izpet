@@ -3,7 +3,9 @@ package izpet
 import (
 	"fmt"
 	"image"
+	"strings"
 	"sync/atomic"
+	"unicode"
 
 	"github.com/ivanizag/iz6502"
 
@@ -193,6 +195,24 @@ func (p *PET) PutChar(ch rune) bool {
 // goroutine.
 func (p *PET) TypeText(text string) {
 	p.keyboard.putText(text)
+}
+
+/*
+paste types a text pasted from the host. The lines end with RETURN, a CR LF
+being one. The letters are typed as they are in the lowercase mode, and
+unshifted in the graphics mode, where the uppercase letters of a BASIC
+listing would otherwise be typed as graphics. The characters with no key are
+skipped.
+*/
+func (p *PET) paste(text string) {
+	text = strings.ReplaceAll(text, "\r\n", "\r")
+	lowerCase := p.io.isLowerCase()
+	for _, ch := range text {
+		if !lowerCase {
+			ch = unicode.ToLower(ch)
+		}
+		p.keyboard.putChar(ch)
+	}
 }
 
 // IsTyping returns true while there are characters waiting to be typed
