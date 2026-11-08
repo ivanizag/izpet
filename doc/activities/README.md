@@ -71,3 +71,10 @@ times faster than BASIC.
 
 The word processor of the 8032: a letter typed, its margins and justification
 set with a format line, kept on a disk and printed.
+
+### [A budget with VisiCalc](visicalc.md)
+
+<a href="visicalc.md"><img src="images/visicalc/budget.png" width="320" alt="A budget in VisiCalc"></a>
+
+The first spreadsheet: a budget with a sum, a cost changed and the total
+recalculated at once, the sheet saved on a disk and printed.

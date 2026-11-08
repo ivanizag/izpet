@@ -1,0 +1,8 @@
+budget            
+                  
+rent           400
+food           300
+car            120
+phone           30
+------------------
+total          850
