@@ -78,3 +78,13 @@ set with a format line, kept on a disk and printed.
 
 The first spreadsheet: a budget with a sum, a cost changed and the total
 recalculated at once, the sheet saved on a disk and printed.
+
+## Games
+
+### [A text adventure: Dog Star](dog-star.md)
+
+<a href="dog-star.md"><img src="images/dog-star/inventory.png" width="320" alt="Dog Star Adventure"></a>
+
+A text adventure in BASIC, from a magazine listing of 1979: the story, a
+walk off the ship in commands of two words, the things picked up, and the
+game saved on a disk and loaded back.

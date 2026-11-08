@@ -8,3 +8,4 @@ izpet.
 |---|---|---|
 | `wordpro4.d64` | WordPro 4 by Steve Punter, as "WORDPRO 4", and other versions and example letters, on a 4040 disk | `wordpro4plus.d64.gz` of the [zimmers.net PET productivity archive](https://www.zimmers.net/anonftp/pub/cbm/pet/prod/), uncompressed |
 | `visicalc.d64` | VisiCalc 1.70AM for the 40 and 80 columns PETs, in versions that do not need the ROM chip the original came with, and the loader "VC←STARTER" | `visicalc-norom.d64.gz` of the [zimmers.net PET productivity archive](https://www.zimmers.net/anonftp/pub/cbm/pet/prod/), uncompressed |
+| `dogstar.d64` | Dog Star Adventure by Lance Micklus, adapted for the PET by David Malmberg, the disk version, as "DOGSTAR" | `dog-star-adventure.zip` of the [IF Archive](https://ifarchive.org/if-archive/games/cbm_pet/), unzipped |
