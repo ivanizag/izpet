@@ -81,6 +81,14 @@ recalculated at once, the sheet saved on a disk and printed.
 
 ## Games
 
+### [A game of Microchess](microchess.md)
+
+<a href="microchess.md"><img src="images/microchess/castled.png" width="320" alt="A game of Microchess"></a>
+
+One of the first programs sold for home computers: the board drawn with the
+graphics characters, moves typed as squares, castling, and the level of play
+raised with the time the PET takes to think.
+
 ### [Playing Space Invaders](space-invaders.md)
 
 <a href="space-invaders.md"><img src="images/space-invaders/mystery.png" width="320" alt="Space Invaders"></a>
