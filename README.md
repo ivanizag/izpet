@@ -32,7 +32,7 @@ The ROMs are embedded in the program, there is nothing to download.
   60 Hz, text and graphics character sets
 - The graphics and business keyboard matrices, read from the editor ROMs
 - Sound on CB2
-- Loading and running `.prg` files, and the first file of `.t64` files
+- Loading and running `.prg` and `.p00` files, and the first file of `.t64` files
 - Two cassette decks playing TAP and WAV files and recording TAP files
 - The IEEE-488 bus with a dual disk drive on unit 8, on D64, D80 and D82 images
   and folders of the host, and a printer on unit 4 writing to a text file
@@ -109,7 +109,7 @@ belong by their type:
 
 | Type | Goes |
 |---|---|
-| `.prg` | loaded and run once BASIC is ready |
+| `.prg`, `.p00` | loaded once BASIC is ready. A BASIC program is run, and moved to `$0401` if it was saved elsewhere, by a C64 for instance; machine code is put where it was saved, to be started with `SYS`. A program that does not fit in the RAM of the model is refused |
 | `.t64` | its first file is loaded and run |
 | `.tap`, `.wav` | in the deck #1 |
 | `.d64`, `.d80`, `.d82`, a folder | in the drive 0 of the unit 8, or the drive 1 if the 0 has a disk |
