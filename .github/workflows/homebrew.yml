@@ -12,7 +12,7 @@ jobs:
     # so the workflow's own GITHUB_TOKEN needs no scopes at all
     permissions: {}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: ivanizag/homebrew-tap
           token: ${{ secrets.TAP_GITHUB_TOKEN }}
