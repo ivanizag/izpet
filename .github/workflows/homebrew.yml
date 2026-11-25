@@ -1,0 +1,38 @@
+name: Update Homebrew tap
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-formula:
+    name: Update the formula
+    runs-on: ubuntu-latest
+    # Checks out and pushes to a different repo using TAP_GITHUB_TOKEN,
+    # so the workflow's own GITHUB_TOKEN needs no scopes at all
+    permissions: {}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ivanizag/homebrew-tap
+          token: ${{ secrets.TAP_GITHUB_TOKEN }}
+
+      - name: Update the formula
+        run: ./update-izpet.sh "${TAG#v}"
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+
+      # git add, not commit -a: on the first release the formula is a new
+      # file, and -a stages only what git already tracks. Staging it first
+      # still leaves nothing to commit when the contents have not changed,
+      # so a re-run of the same version remains a no-op.
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/izpet.rb
+          if git commit -m "izpet ${{ github.event.release.tag_name }}"; then
+            git push
+          else
+            echo "Formula already up to date"
+          fi

@@ -1,0 +1,132 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+
+  build-linux:
+    name: Build Linux (amd64)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # Build on ubuntu 22.04 so the binary works on any distro with glibc 2.35+
+    container: ubuntu:22.04
+    steps:
+      - name: Install build dependencies
+        run: |
+          apt-get update
+          apt-get install -y build-essential ca-certificates git \
+            libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxcursor-dev \
+            libxi-dev libxinerama-dev libxrandr-dev libxxf86vm-dev \
+            libasound2-dev pkg-config
+
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      # The workspace is owned by a different user than the container's root
+      - name: Allow git to read the workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Build
+        working-directory: frontend/petebiten
+        run: CGO_ENABLED=1 go build -ldflags "-s -w" -o izpet .
+
+      - name: Package
+        run: tar -czf izpet-linux-amd64.tar.gz -C frontend/petebiten izpet -C ../.. README.md LICENSE
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: izpet-linux-amd64
+          path: izpet-linux-amd64.tar.gz
+
+  build-windows:
+    name: Build Windows (amd64)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      # Ebitengine reaches the Windows APIs without cgo, so this is a plain
+      # cross compile with no toolchain to install
+      - name: Build
+        working-directory: frontend/petebiten
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 \
+            go build -ldflags "-s -w" -o izpet.exe .
+
+      - name: Package
+        run: |
+          zip --junk-paths izpet-windows-amd64.zip frontend/petebiten/izpet.exe README.md LICENSE
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: izpet-windows-amd64
+          path: izpet-windows-amd64.zip
+
+  build-macos:
+    name: Build macOS (universal)
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Build arm64
+        working-directory: frontend/petebiten
+        run: CGO_ENABLED=1 GOARCH=arm64 go build -ldflags "-s -w" -o izpet-arm64 .
+
+      - name: Build amd64
+        working-directory: frontend/petebiten
+        run: |
+          CGO_ENABLED=1 GOARCH=amd64 CC="clang -arch x86_64" \
+            go build -ldflags "-s -w" -o izpet-amd64 .
+
+      - name: Create universal binary
+        working-directory: frontend/petebiten
+        run: |
+          lipo -create -output izpet izpet-arm64 izpet-amd64
+          lipo -info izpet
+
+      - name: Package
+        run: tar -czf izpet-macos-universal.tar.gz -C frontend/petebiten izpet -C ../.. README.md LICENSE
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: izpet-macos-universal
+          path: izpet-macos-universal.tar.gz
+
+  release:
+    name: Create draft release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build-linux, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          draft: true
+          generate_release_notes: true
+          files: |
+            izpet-linux-amd64.tar.gz
+            izpet-windows-amd64.zip
+            izpet-macos-universal.tar.gz

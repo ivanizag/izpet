@@ -49,6 +49,17 @@ The [`activities`](activities) package makes the pictures of the
 IZPET_ACTIVITY_SCREENSHOTS=1 go test -count=1 -run TestActivityScreenshots ./activities
 ```
 
+## Installing
+
+No installation required. [Download](https://github.com/ivanizag/izpet/releases)
+the archive for Linux, Windows or macOS and run the single executable inside.
+
+On macOS it can also be installed with homebrew:
+
+```bash
+brew install ivanizag/tap/izpet
+```
+
 ## Running
 
 ```bash
